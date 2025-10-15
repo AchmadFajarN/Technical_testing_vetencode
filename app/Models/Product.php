@@ -3,10 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticable
+class Product extends Model
 {
     use SoftDeletes;
 
@@ -14,15 +13,17 @@ class User extends Authenticable
     public $incrementing = false;
 
     protected $fillable = [
-        "id", "name", "email", "password", "active", "role"
+        "id", "name", "price", "active"
     ];
 
     protected $cast = [
-        "active" => "boolean"
+        "active" => "boolean",
+        "price" => "decimal:10,2",
     ];
 
-    public function distributions() 
+    public function distributionDetails() 
     {
-        return $this->hasMany(Distribution::class, "barista_id", 'id');
+        return $this -> hasMany(DistributionDetail::class, "product_id", 'id');
     }
+
 }

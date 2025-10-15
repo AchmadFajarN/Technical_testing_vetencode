@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            "id" => '1',
+            'id' => \Illuminate\Support\Str::uuid()->toString(),
             "name" => 'admin user',
             'email'=> 'admin@example.com',
             'password' => bcrypt('password'),
@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            "id" => '2',
+            'id' => \Illuminate\Support\Str::uuid()->toString(),
             "name" => "Barista User",
             "email" => "barista@example.com",
             "password" => bcrypt("password"),
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            "id" => '3',
+            'id' => \Illuminate\Support\Str::uuid()->toString(),
             "name" => "Barista user 2",
             "email" => "barista2@example.com",
             "password" => bcrypt("password"),

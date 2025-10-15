@@ -15,35 +15,35 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         DB::table("products")->insert([
-            "id" => '1',
+            'id' => \Illuminate\Support\Str::uuid()->toString(),
             "name" => "Kopi Susu",
             "price" => rand(10000, 50000),
             "active" => true
         ]);
 
          DB::table("products")->insert([
-            "id" => '2',
+            'id' => \Illuminate\Support\Str::uuid()->toString(),
             "name" => "Kopi Gula Aren",
             "price" => rand(10000, 50000),
             "active" => true
         ]);
 
         DB::table("products")->insert([
-            "id" => '3',
+            'id' => \Illuminate\Support\Str::uuid()->toString(),
             "name" => "Creamy Latte",
             "price" => rand(10000, 50000),
             "active" => true
         ]);
 
         DB::table("products")->insert([
-            "id" => '4',
+            'id' => \Illuminate\Support\Str::uuid()->toString(),
             "name" => "Charcoal",
             "price" => rand(10000, 50000),
             "active" => true
         ]);
 
         DB::table("products")->insert([
-            "id" => '5',
+            'id' => \Illuminate\Support\Str::uuid()->toString(),
             "name" => "Matcha",
             "price" => rand(10000, 50000),
             "active" => true
