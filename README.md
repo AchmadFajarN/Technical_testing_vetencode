@@ -1,8 +1,8 @@
-# 📄 Dokumentasi Setup Proyek Laravel: Sistem Distribusi Produk
+# Dokumentasi Setup Proyek Laravel: Sistem Distribusi Produk
 
 Dokumen ini berisi panduan langkah demi langkah untuk melakukan *setup* dan menjalankan proyek Sistem Distribusi Produk berbasis Laravel, AJAX, dan DataTables *Server-side*.
 
-## 🚀 Persyaratan Sistem
+## Persyaratan Sistem
 
 Pastikan sistem Anda telah menginstal komponen berikut:
 
