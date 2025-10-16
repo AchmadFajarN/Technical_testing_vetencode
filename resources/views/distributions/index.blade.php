@@ -107,59 +107,73 @@
         ],
       });
 
-      $('#distributionsTable tbody').on('click', '.btn-detail', function() {
+      $('#distributionsTable tbody').on('click', '.btn-detail', async function() {
       const distributionId = $(this).data('id');
+      try {
+        const response = await fetch(`/api/distribution-products/${distributionId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
 
-      fetch(`/api/distribution-products/${distributionId}`)
-        .then(res => res.json())
-        .then(json => {
-      const tbody = $('#detailTable tbody');
-      tbody.empty();
+        const result = await response.json()
+        const tbody = $('#detailTable tbody');
+        tbody.empty()
 
-      if(json.status === 'success' && json.data.length > 0) {
-        json.data.forEach(p => {
-          tbody.append(`
-            <tr>
-              <td>${p.product_name}</td>
-              <td>${p.qty}</td>
-              <td>Rp ${Number(p.price).toLocaleString()}</td>
-              <td>Rp ${Number(p.total).toLocaleString()}</td>
-            </tr>
-          `);
-        });
-      } else {
-        tbody.append('<tr><td colspan="4" class="text-center">Tidak ada produk</td></tr>');
+        if (result.status === 'success' && result.data.length > 0) {
+          result.data.forEach(p => {
+            tbody.append(`
+              <tr>
+                <td>${p.product_name}</td>
+                <td>${p.qty}</td>
+                <td>Rp ${Number(p.price).toLocaleString()}</td>
+                <td>Rp ${Number(p.total).toLocaleString()}</td>
+              </tr>
+            `)
+          })
+        } else {
+          tbody.append('<tr><td colspan="4" class="text-center">Tidak ada produk</td></tr>');
+        }
+
+        $('#detailModal').modal('show');
+
+      }   catch(err) {
+         console.error('Detail fetch error:', err);
+         alert('Gagal memuat detail distribusi.');
       }
     });
-    });
 
-     $('#distributionsTable tbody').on('click', '.btn-delete', function() {
+     $('#distributionsTable tbody').on('click', '.btn-delete', async function() {
     const distributionId = $(this).data('id');
     
     if(confirm('Apakah yakin ingin menghapus distribusi ini?')) {
-        fetch(`/api/distributions/${distributionId}`, { 
-            method: 'DELETE' 
-        })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(`Gagal menghapus. Status: ${res.status}`);
-            }
-      
-            return res.text();
-        })
-        .then(responseText => {
-            let json;
-            if(json.status === 'success') {
-                alert('Distribusi berhasil dihapus: ' + json.message);
-                table.ajax.reload(); 
-            } else {
-                alert('Gagal menghapus distribusi: ' + (json.message || 'Error tidak diketahui'));
-            }
-        })
-        .catch(error => {
-            console.error('Delete Error:', error);
-            alert('Terjadi kesalahan saat menghapus distribusi: ' + error.message);
+      try {
+        const response = await fetch(`/api/distributions/${ distributionId }`, {
+          method: 'DELETE',
+          headers: {
+            "Content-Type": "application/json"
+          }
         });
+
+        if (!response.ok) {
+          throw new Error('HTTP Error, Gagal menghapus')
+          return result.text()
+        }
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          alert("Distribusi berhasil dihapus")
+          table.ajax.reload();
+        } else {
+          alert("Gagal menghapus distribusi")
+        }
+
+      } catch(error) {
+          console.error('Delete Error:', error);
+          alert('Terjadi kesalahan saat menghapus distribusi: ' + error.message);
+      }
     }
 });
  });
