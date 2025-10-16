@@ -144,38 +144,47 @@
       }
     });
 
-     $('#distributionsTable tbody').on('click', '.btn-delete', async function() {
+    $('#distributionsTable tbody').on('click', '.btn-delete', async function() {
     const distributionId = $(this).data('id');
-    
-    if(confirm('Apakah yakin ingin menghapus distribusi ini?')) {
-      try {
-        const response = await fetch(`/api/distributions/${ distributionId }`, {
-          method: 'DELETE',
-          headers: {
-            "Content-Type": "application/json"
-          }
-        });
 
-        if (!response.ok) {
-          throw new Error('HTTP Error, Gagal menghapus')
-          return result.text()
-        }
+    if (!confirm('Apakah yakin ingin menghapus distribusi ini?')) return;
 
-        const result = await response.json();
+    try {
+      const response = await fetch(`/api/distributions/${distributionId}`, {
+        method: 'DELETE',
+        headers: { "Content-Type": "application/json" }
+      });
 
-        if (result.status === 'success') {
-          alert("Distribusi berhasil dihapus")
-          table.ajax.reload();
-        } else {
-          alert("Gagal menghapus distribusi")
-        }
-
-      } catch(error) {
-          console.error('Delete Error:', error);
-          alert('Terjadi kesalahan saat menghapus distribusi: ' + error.message);
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`HTTP ${response.status} - ${errText || response.statusText}`);
       }
+
+      const bodyText = await response.text();
+      let result;
+      if (bodyText) {
+        try {
+          result = JSON.parse(bodyText);
+        } catch (parseErr) {
+          throw new Error('Response bukan JSON valid: ' + parseErr.message);
+        }
+      } else {
+        result = { status: 'success', message: 'Dihapus (no content returned)' };
+      }
+
+      if (result.status === 'success') {
+        alert("Distribusi berhasil dihapus");
+        table.ajax.reload();
+      } else {
+        alert("Gagal menghapus distribusi: " + (result.message || 'Unknown error'));
+      }
+
+    } catch (error) {
+      console.error('Delete Error:', error);
+      alert('Terjadi kesalahan saat menghapus distribusi: ' + error.message);
     }
-});
+  });
+
  });
   </script>
 </body>
