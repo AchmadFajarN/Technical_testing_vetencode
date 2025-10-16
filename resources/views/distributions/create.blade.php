@@ -6,6 +6,11 @@
   <title>Tambah Distribusi</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+  .container {
+    min-height: 100vh;
+  }
+</style>
 <body class="bg-light">
 
 <div class="container mt-5">
@@ -14,8 +19,8 @@
     <a href="{{ url('/distributions') }}" class="btn btn-secondary">← Kembali</a>
   </div>
 
-  <div class="card">
-    <div class="card-body">
+  <div class="card container-body">
+    <div class="card-body ">
       <!-- Form Distribusi -->
       <form id="form-distribution">
         <div class="mb-3">
@@ -208,13 +213,14 @@ document.getElementById('submitDistribution').addEventListener('click', async fu
         total: p.total
     }));
 
+    const ADMIN_NAME_FROM_SEEDER = 'admin user'
 
     const payload = {
         barista_id: baristaId,
         total_qty: totalQty,
         estimated_result: estimatedResult,
         notes: notes,
-        created_by: '5fd33b0d-5c98-4247-9c20-1b820f6d471c',
+        created_by: ADMIN_NAME_FROM_SEEDER,
         details: distributionDetails 
     };
 
@@ -233,7 +239,7 @@ document.getElementById('submitDistribution').addEventListener('click', async fu
         window.location.href = "/distributions"
       } else {
         let errorMessage = result.message || "Gagal menambahkan distribusi"
-        if (res.errors) {
+        if (result.errors) {
           errorMessage += "\n\nDetail Error:\n" + Object.values(result.errors).flat().join("\n");
         }
         

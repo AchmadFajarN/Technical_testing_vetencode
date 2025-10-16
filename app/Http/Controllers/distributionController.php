@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\DistributionDetail;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\User;
 
 class distributionController extends Controller
 {
@@ -44,6 +45,18 @@ class distributionController extends Controller
 
     public function store(Request $request) 
     {
+
+       $adminName = $request->input('created_by');
+       $adminUser = User::where('name', $adminName)->where('role', 'admin')->first();
+
+       if (!$adminUser) {
+        return response()->json([
+            "status" => "failed",
+            "message" => "Nama admin salah"
+        ], 400);
+       }
+
+       $request->merge(['created_by' => $adminUser->id]);
     
        $validator = Validator::make($request->all(), [
             "barista_id" => "required|string|exists:users,id",
